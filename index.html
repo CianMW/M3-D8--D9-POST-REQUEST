@@ -63,10 +63,13 @@ let displayData = (data) => {
         <div class="card" style="width: 18rem;">
         <img src="${obj.imageUrl}" width="200px" height="300px" class="card-img-top " alt="...">
         <div class="card-body" style= "max-height: 250px">
+            <div>
             <h5 class="card-title">${obj.name}</h5>
             <h6 class="card-subtitle mb-2 text-muted">€${obj.price}</h6>
-            <p class="card-text" style="width:250px; height: 95px">${obj.description}</p>
-            <a href="#" class="btn btn-primary">Buy now</a>
+            <p class="card-text" style="max-width:250px; max-height: 95px">${obj.description}</p>
+           </div>  
+           <a href="#" class="btn btn-primary">Buy now</a>
+       
         </div>
         </div>
         </div>
