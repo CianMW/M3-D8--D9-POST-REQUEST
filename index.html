@@ -29,6 +29,15 @@
         </div>
       </nav>
 
+    <div class="container">
+            <div class="row" id="product-catalogue">
+
+            </div>
+
+
+
+
+    </div>
 
 
 
@@ -39,6 +48,38 @@
 
 
 <script>
+    let catalogue = document.querySelector("#product-catalogue")
+
+
+let displayData = (data) => {
+
+    data.forEach(obj => {
+
+        let newItem = document.createElement("div")
+            newItem.className = "col-3"
+
+        newItem.innerHTML = `
+        <div class="col-3">
+        <div class="card" style="width: 18rem;">
+        <img src="${obj.imageUrl}" width="200px" height="300px" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">${obj.name}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">€${obj.price}</h6>
+            <p class="card-text">${obj.description}</p>
+            <a href="#" class="btn btn-primary">Buy now</a>
+        </div>
+        </div>
+        </div>
+                
+        `
+        catalogue.appendChild(newItem)
+        
+    })
+
+
+}
+
+
 
 window.onload = async () => {
     let response = await fetch("https://striveschool-api.herokuapp.com/api/product/", {
@@ -46,6 +87,9 @@ headers: {
 "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTRiMWQ5ODRiYjUzZDAwMTViMTllZDAiLCJpYXQiOjE2MzIzMTI3MjgsImV4cCI6MTYzMzUyMjMyOH0.1mHsb-t2ReuCs2WsyDFcnIoddjZMG44_rc-BM_Catno"
 }})
 let data = await response.json()
+
+displayData(data)
+
 console.log(data)
 
 
