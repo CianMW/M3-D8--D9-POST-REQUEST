@@ -40,6 +40,9 @@
     </div>
 
 
+ 
+
+
 
 
 
@@ -84,6 +87,7 @@ let displayData = (data) => {
 
 
 
+
 window.onload = async () => {
     let response = await fetch("https://striveschool-api.herokuapp.com/api/product/", {
 headers: {
@@ -94,6 +98,7 @@ let data = await response.json()
 displayData(data)
 
 console.log(data)
+
 
 
 }
