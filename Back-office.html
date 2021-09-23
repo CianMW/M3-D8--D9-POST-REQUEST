@@ -242,16 +242,50 @@ const setupEditStation = (data) => {
                   </div>
                   <div class="button-holder d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary">Submit</button>
-                  <button type="button" class="btn btn-danger">Delete</button>
+                  <button type="button" onclick="deleteItem()" class="btn btn-danger">Delete</button>
                   </div>
               </form>
           </div>
       </div>
       </div>`
 
+}
 
+
+const deleteItem = async () => {
+
+  event.preventDefault()
+try{
+
+
+let response = await fetch(url+id, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTRiMWQ5ODRiYjUzZDAwMTViMTllZDAiLCJpYXQiOjE2MzIzMTI3MjgsImV4cCI6MTYzMzUyMjMyOH0.1mHsb-t2ReuCs2WsyDFcnIoddjZMG44_rc-BM_Catno"
+                }
+            })
+
+
+  
+  if (response.ok) {
+  
+       let edit = await response.json()
+         alert("You successfully deleted  " + id )
+         setTimeout(() => window.location.assign("./Back-office.html"), 2000)
+           } else {
+
+              alert("you could not delete" + id)
+                    }
+      } catch (err) {
+        alert("There was a problem ")
+      } finally {
+
+      }
 
 }
+
+
 
 let url = "https://striveschool-api.herokuapp.com/api/product/"
   let id = new URLSearchParams(location.search).get("itemid")
