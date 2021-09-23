@@ -29,6 +29,10 @@
         </div>
       </nav>
 
+      <div class="container" id="spinner-location">
+        
+      </div>
+
     <div class="container-fluid mb-2">
             <div class="row" id="product-catalogue">
 
@@ -71,8 +75,10 @@ let displayData = (data) => {
             <h6 class="card-subtitle mb-2 text-muted">€${obj.price}</h6>
             <p class="card-text" style="max-width:250px; max-height: 95px">${obj.description}</p>
            </div>  
+           <div class="justify-content-between">
            <a href="#" class="btn btn-primary">Buy now</a>
-       
+           <button type="button" id=${obj._id} onclick="goToDetails(event)" class="btn btn-secondary">edit</button>
+            </div>
         </div>
         </div>
         </div>
@@ -85,10 +91,34 @@ let displayData = (data) => {
 
 }
 
+let goToDetails = (event) => {
+  let id = event.currentTarget.id
+  console.log(id)
+
+  window.location.assign("./details.html?itemid="+id)
+
+
+}
+
+//spinner function
+const isLoading = (loading) => {
+            const containerLocation = document.querySelector("#spinner-location")
+
+            const spinner = `<span id="spinner" class="spinner-border spinner-border-sm ml-2" role="status"
+                aria-hidden="true"></span>`
+
+            if (loading) {
+                containerLocation.innerHTML += spinner;
+            } else {
+                containerLocation.querySelector("#spinner").remove()
+            }
+        };
+
 
 
 
 window.onload = async () => {
+  isLoading(true)
     let response = await fetch("https://striveschool-api.herokuapp.com/api/product/", {
 headers: {
 "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTRiMWQ5ODRiYjUzZDAwMTViMTllZDAiLCJpYXQiOjE2MzIzMTI3MjgsImV4cCI6MTYzMzUyMjMyOH0.1mHsb-t2ReuCs2WsyDFcnIoddjZMG44_rc-BM_Catno"
@@ -100,7 +130,7 @@ displayData(data)
 console.log(data)
 
 
-
+isLoading(false)
 }
 
 </script>

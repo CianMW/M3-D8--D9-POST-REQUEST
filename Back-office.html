@@ -29,7 +29,7 @@
       </div>
     </nav>
 
-<div class="d-flex d-inline justify-content-center align-items-center">
+<div id="main-container" class="d-flex d-inline justify-content-center align-items-center">
     <div class="container" >
       <div class="row justify-content-center">
           <div class="col-md-6">
@@ -67,7 +67,7 @@
           </div>
       </div>
   </div>
-  <div class="container bg-light text-dark" mt-5" style="height:400px; overflow-y: scroll;">
+  <div class="container bg-light text-dark mt-5" style="height:400px; overflow-y: scroll;">
     <div class="row">
       <ol id="product-list" class="w-100">
 
@@ -87,12 +87,11 @@
 <script>
 
 //Submit data
-let submitData = (event) => {
+let submitData = async (event) => {
+  try{
     event.preventDefault()
 
-    const url = "https://striveschool-api.herokuapp.com/api/product/"
-
-    const dataObject = {
+    let dataObject = await {
         "name": document.querySelector("#name").value, 
         "description": document.querySelector("#description").value,
         "brand": document.querySelector("#brand").value,
@@ -102,17 +101,27 @@ let submitData = (event) => {
 
 
 
-console.log(dataObject)
 
- fetch(url, {
+
+ let response = await fetch(url, {
                     method: "POST",
                     body: JSON.stringify(dataObject),
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTRiMWQ5ODRiYjUzZDAwMTViMTllZDAiLCJpYXQiOjE2MzIzMTI3MjgsImV4cCI6MTYzMzUyMjMyOH0.1mHsb-t2ReuCs2WsyDFcnIoddjZMG44_rc-BM_Catno"
                     }
-                })
-
+                }) 
+                
+    if (response.ok) {
+         let newObj = await response.json()
+            alert("Product: " + newObj.name + "  created successfully")
+            setTimeout(() => window.location.assign("./Back-office.html"), 2000)
+                    }
+                }
+     catch (err) {
+         console.log(err)
+                }
+        
 }
 
 //fill productlist
@@ -140,21 +149,129 @@ let fillProductList = async () => {
         document.getElementById("product-list").appendChild(newLiNode)
         
       });
+
+  
     
 }
 
 let goToDetails = (event) => {
   let id = event.currentTarget.id
   console.log(id)
-  let url = "https://striveschool-api.herokuapp.com/api/product/"
+
   window.location.assign("./details.html?itemid="+id)
 
 
 }
 
+//SUBMIT EDITS
+let submitEditData = async () =>{
+  event.preventDefault()
+try{
+let dataObject = await {
+    "name": document.querySelector("#name").value, 
+    "description": document.querySelector("#description").value,
+    "brand": document.querySelector("#brand").value,
+    "imageUrl": document.querySelector("#imageURL").value,
+    "price": document.querySelector("#price").value,
+}
 
-window.onload = () => {
-  fillProductList()
+
+
+console.log(dataObject)
+
+let response = await fetch(url+id, {
+                method: "PUT",
+                body: JSON.stringify(dataObject),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTRiMWQ5ODRiYjUzZDAwMTViMTllZDAiLCJpYXQiOjE2MzIzMTI3MjgsImV4cCI6MTYzMzUyMjMyOH0.1mHsb-t2ReuCs2WsyDFcnIoddjZMG44_rc-BM_Catno"
+                }
+            })
+
+
+  
+  if (response.ok) {
+  
+       let edit = await response.json()
+                        alert("success", "Your edit of " + id + " was successful")
+                    } else {
+                        // Creation alert
+                        alert("info", "Appointment created successfully with an id of " + id)
+                    }
+      } catch (err) {
+        alert("your edit was not successful")
+      } finally {
+
+      }
+      
+
+
+}
+
+
+const setupEditStation = (data) => {
+    document.getElementById("main-container").innerHTML = `   
+    <div class="container">
+    <div class="row justify-content-center">
+          <div class="col-md-6">
+              <h2 class="mt-5 mb-4">Add Product to Catalogue</h2>
+              <form onsubmit="submitEditData(event)">
+                  <div class="form-group">
+                      <label for="name">Name</label>
+                      <input id="name" value=${data.name} type="text" class="form-control" placeholder="Insert product name here....">
+                  </div>
+                  <div class="form-group">
+                      <label for="description">Description</label>
+                      <textarea id="description" type="textarea" class="form-control"
+                          placeholder="Insert product description here....">${data.description}</textarea>
+                  </div>
+                  <div class="form-group">
+                      <label for="brand">Brand</label>
+                      <input id="brand" value=${data.brand} type="text" class="form-control"
+                          placeholder="Insert brand here....">
+                  </div>
+                  <div class="form-group">
+                      <label for="imageURL">Image URL</label>
+                      <input id="imageURL" value=${data.imageUrl} type="text" class="form-control"
+                          placeholder="Insert Image URL here....">
+                  </div>
+                  <div class="form-group">
+                      <label for="price">Price</label>
+                      <input id="price" value=${data.price} type="number" class="form-control"
+                          placeholder="Insert price here....">
+                  </div>
+                  <div class="button-holder d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="button" class="btn btn-danger">Delete</button>
+                  </div>
+              </form>
+          </div>
+      </div>
+      </div>`
+
+
+
+}
+
+let url = "https://striveschool-api.herokuapp.com/api/product/"
+  let id = new URLSearchParams(location.search).get("itemid")
+window.onload = async () => {
+  
+  if (id) {
+    let response = await fetch(url + id , {
+            headers: {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTRiMWQ5ODRiYjUzZDAwMTViMTllZDAiLCJpYXQiOjE2MzIzMTI3MjgsImV4cCI6MTYzMzUyMjMyOH0.1mHsb-t2ReuCs2WsyDFcnIoddjZMG44_rc-BM_Catno"
+            }})
+    let itemData = await response.json()
+    console.log(itemData)
+    setupEditStation(itemData)
+    
+
+    
+  }else {
+    fillProductList()
+  }
+  
 }
 </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
