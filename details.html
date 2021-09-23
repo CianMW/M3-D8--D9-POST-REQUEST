@@ -11,7 +11,77 @@
     <title>Hello, world!</title>
   </head>
   <body class="bg-dark text-light">
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">The-Office</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item ">
+              <a class="nav-link" href="./index.html">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item ">
+              <a class="nav-link" href="./Back-office.html">Office</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+
+    <div class="container mt-5 justify-content-center" id="detail-container">
+        
+    </div>
   
+
+    <script>
+        let displayData = (data) =>{
+            let newRowNode = document.createElement("div")
+            newRowNode.className ="row justify-content-center"
+            newRowNode.innerHTML = `
+                <div class="row justify-content-center">
+                    
+                    <div class="col" style ="width: 30vw">
+                <h3>${data.name}</h3>
+                <p>${data.brand}</p>
+                <p>${data.description}</p>
+                <p>€ ${data.price}</p>
+                <p>small text</p>
+                <button type="button" id=${data._id} onclick="edit(event)" class="btn btn-secondary">edit</button>
+                    </div>
+                <img src="${data.imageUrl}" width = 200px height = 300px>
+
+            </div>`
+            document.getElementById("detail-container").appendChild(newRowNode)
+        }
+
+
+        window.onload = async () => {
+            let url = "https://striveschool-api.herokuapp.com/api/product/"
+            let id = new URLSearchParams(location.search).get("itemid")
+            console.log(id)
+
+            let response = await fetch(url + id , {
+            headers: {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTRiMWQ5ODRiYjUzZDAwMTViMTllZDAiLCJpYXQiOjE2MzIzMTI3MjgsImV4cCI6MTYzMzUyMjMyOH0.1mHsb-t2ReuCs2WsyDFcnIoddjZMG44_rc-BM_Catno"
+            }})
+            let data = await response.json()
+            console.log(data)
+            displayData(data)
+        }
+
+        const edit = (event) => {
+            let id = event.currentTarget.id
+            console.log(id)
+
+            window.location.assign("./Back-office.html?itemid="+id)
+
+        }
+
+
+    </script>
 
 </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

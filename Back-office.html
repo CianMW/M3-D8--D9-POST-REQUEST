@@ -146,7 +146,8 @@ let fillProductList = async () => {
 let goToDetails = (event) => {
   let id = event.currentTarget.id
   console.log(id)
-  window.location.assign("./details.html?id="+id)
+  let url = "https://striveschool-api.herokuapp.com/api/product/"
+  window.location.assign("./details.html?itemid="+id)
 
 
 }
